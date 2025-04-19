@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api';
 
-const EditUser = () => {
+const AddUser = () => {
   const [form, setForm] = useState({ name: '', phone: '', email: '', location: '' });
   const [errors, setErrors] = useState({});
-  const { id } = useParams();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    api.get(`/${id}`).then((res) => setForm(res.data));
-  }, [id]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -33,19 +28,19 @@ const validateForm = () => {
       setErrors(validationErrors);
       return;
     }
-    await api.put(`/${id}`, form);
+    await api.post('/', form);
     navigate('/');
   };
 
   return (
     <div>
-      <h2>Edit User</h2>
+      <h2>Add User</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="name"
           className="form-control mb-2"
-          value={form.name}
+          placeholder="Name"
           onChange={handleChange}
         />
         {errors.name && <small className="text-danger">{errors.name}</small>}
@@ -54,7 +49,7 @@ const validateForm = () => {
           type="text"
           name="phone"
           className="form-control mb-2"
-          value={form.phone}
+          placeholder="Phone"
           onChange={handleChange}
         />
         {errors.phone && <small className="text-danger">{errors.phone}</small>}
@@ -63,7 +58,7 @@ const validateForm = () => {
           type="email"
           name="email"
           className="form-control mb-2"
-          value={form.email}
+          placeholder="Email"
           onChange={handleChange}
         />
         {errors.email && <small className="text-danger">{errors.email}</small>}
@@ -72,15 +67,15 @@ const validateForm = () => {
           type="text"
           name="location"
           className="form-control mb-2"
-          value={form.location}
+          placeholder="Location"
           onChange={handleChange}
         />
         {errors.location && <small className="text-danger">{errors.location}</small>}
 
-        <button className="btn btn-success">Update</button>
+        <button className="btn btn-primary">Submit</button>
       </form>
     </div>
   );
 };
 
-export default EditUser;
+export default AddUser;
